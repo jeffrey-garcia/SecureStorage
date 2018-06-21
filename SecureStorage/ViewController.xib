@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ViewController" customModule="SecureStorage" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="iN0-l3-epB" id="aGd-LM-Xw0"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OGD-5I-KMT">
+                    <rect key="frame" x="10" y="30" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Generate UUID"/>
+                </button>
+                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7mC-3j-O0G">
+                    <rect key="frame" x="10" y="65" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Save UUID to UserDefaults"/>
+                </button>
+                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zg5-Gm-trw">
+                    <rect key="frame" x="10" y="100" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Get UUID from UserDefaults"/>
+                </button>
+                <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecH-mA-lqa">
+                    <rect key="frame" x="10" y="138" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Generate EncKey"/>
+                </button>
+                <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="adk-4Z-h8M">
+                    <rect key="frame" x="10" y="173" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Save EncKey to Keychain"/>
+                </button>
+                <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fL8-P1-U3G">
+                    <rect key="frame" x="10" y="208" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Get EncKey from Keychain"/>
+                </button>
+                <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zf7-UZ-I4w">
+                    <rect key="frame" x="10" y="243" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Save to DB"/>
+                </button>
+                <button opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tik-S9-ls7">
+                    <rect key="frame" x="10" y="278" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Get from DB"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="adk-4Z-h8M" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="0h0-A2-aqG"/>
+                <constraint firstItem="tik-S9-ls7" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="2nw-q9-3b1"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="OGD-5I-KMT" secondAttribute="trailing" constant="10" id="2vK-GI-tFG"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="zg5-Gm-trw" secondAttribute="trailing" constant="10" id="7mw-gs-lJh"/>
+                <constraint firstItem="zf7-UZ-I4w" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="9eK-Jw-U0P"/>
+                <constraint firstItem="fL8-P1-U3G" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="9yd-R8-FLw"/>
+                <constraint firstItem="OGD-5I-KMT" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="BDQ-hn-Ly1"/>
+                <constraint firstItem="zg5-Gm-trw" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="DAc-zO-27b"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="ecH-mA-lqa" secondAttribute="trailing" constant="10" id="Dd7-Wv-dRL"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="fL8-P1-U3G" secondAttribute="trailing" constant="10" id="MRG-15-Rcs"/>
+                <constraint firstItem="ecH-mA-lqa" firstAttribute="top" secondItem="zg5-Gm-trw" secondAttribute="bottom" constant="8" id="Q7r-RK-oPw"/>
+                <constraint firstItem="fL8-P1-U3G" firstAttribute="top" secondItem="adk-4Z-h8M" secondAttribute="bottom" constant="5" id="Rq5-dQ-hvb"/>
+                <constraint firstItem="OGD-5I-KMT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="SWn-lX-7Br"/>
+                <constraint firstItem="7mC-3j-O0G" firstAttribute="top" secondItem="OGD-5I-KMT" secondAttribute="bottom" constant="5" id="TPp-0r-Zpo"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="tik-S9-ls7" secondAttribute="trailing" constant="10" id="Z32-JG-Z4n"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="7mC-3j-O0G" secondAttribute="trailing" constant="10" id="cuG-6M-l8b"/>
+                <constraint firstItem="7mC-3j-O0G" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="eto-of-ahw"/>
+                <constraint firstItem="ecH-mA-lqa" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="fLo-4n-wGc"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="adk-4Z-h8M" secondAttribute="trailing" constant="10" id="faJ-bh-5lG"/>
+                <constraint firstItem="OGD-5I-KMT" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="k0s-4M-V8X"/>
+                <constraint firstItem="adk-4Z-h8M" firstAttribute="top" secondItem="ecH-mA-lqa" secondAttribute="bottom" constant="5" id="rLd-bz-AXS"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="zf7-UZ-I4w" secondAttribute="trailing" constant="10" id="rgx-wi-Km1"/>
+                <constraint firstItem="zg5-Gm-trw" firstAttribute="top" secondItem="7mC-3j-O0G" secondAttribute="bottom" constant="5" id="rih-8O-Oet"/>
+                <constraint firstItem="tik-S9-ls7" firstAttribute="top" secondItem="zf7-UZ-I4w" secondAttribute="bottom" constant="5" id="t77-o8-nef"/>
+                <constraint firstItem="zf7-UZ-I4w" firstAttribute="top" secondItem="fL8-P1-U3G" secondAttribute="bottom" constant="5" id="vwm-05-GoP"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+        </view>
+    </objects>
+</document>
