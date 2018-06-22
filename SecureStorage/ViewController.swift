@@ -9,6 +9,9 @@
 import UIKit
 import CoreData
 
+import CryptoSwift
+import SAMKeychain
+
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -61,7 +64,7 @@ class ViewController: UIViewController {
             if view is UIButton {
                 print("view 5 is \(NSStringFromClass(object_getClass(view)!))")
                 let saveUuidToKeychain = view as? UIButton
-                saveUuidToKeychain?.addTarget(self, action: #selector(saveToKeychain), for: .touchUpInside)
+                saveUuidToKeychain?.addTarget(self, action: #selector(saveToKeychain2), for: .touchUpInside)
             }
         }
         
@@ -69,23 +72,47 @@ class ViewController: UIViewController {
             if view is UIButton {
                 print("view 6 is \(NSStringFromClass(object_getClass(view)!))")
                 let getUuidToKeychain = view as? UIButton
-                getUuidToKeychain?.addTarget(self, action: #selector(getFromKeychain), for: .touchUpInside)
+                getUuidToKeychain?.addTarget(self, action: #selector(getFromKeychain2), for: .touchUpInside)
             }
         }
         
         if let view = self.view.viewWithTag(7) { // follow the tag defined in the Interface Builder of the button
             if view is UIButton {
                 print("view 7 is \(NSStringFromClass(object_getClass(view)!))")
-                let saveToDbBtn = view as? UIButton
-                saveToDbBtn?.addTarget(self, action: #selector(saveToDb), for: .touchUpInside)
+                let generateChecksumBtn = view as? UIButton
+                generateChecksumBtn?.addTarget(self, action: #selector(get32BitChecksum), for: .touchUpInside)
             }
         }
         
         if let view = self.view.viewWithTag(8) { // follow the tag defined in the Interface Builder of the button
             if view is UIButton {
                 print("view 8 is \(NSStringFromClass(object_getClass(view)!))")
+                let encryptStrBtn = view as? UIButton
+                encryptStrBtn?.addTarget(self, action: #selector(encryptString), for: .touchUpInside)
+            }
+        }
+        
+        if let view = self.view.viewWithTag(9) { // follow the tag defined in the Interface Builder of the button
+            if view is UIButton {
+                print("view 9 is \(NSStringFromClass(object_getClass(view)!))")
+                let decryptStrBtn = view as? UIButton
+                decryptStrBtn?.addTarget(self, action: #selector(decryptString), for: .touchUpInside)
+            }
+        }
+        
+        if let view = self.view.viewWithTag(10) { // follow the tag defined in the Interface Builder of the button
+            if view is UIButton {
+                print("view 10 is \(NSStringFromClass(object_getClass(view)!))")
                 let getFromDbBtn = view as? UIButton
                 getFromDbBtn?.addTarget(self, action: #selector(getFromDb), for: .touchUpInside)
+            }
+        }
+        
+        if let view = self.view.viewWithTag(11) { // follow the tag defined in the Interface Builder of the button
+            if view is UIButton {
+                print("view 11 is \(NSStringFromClass(object_getClass(view)!))")
+                let saveToDbBtn = view as? UIButton
+                saveToDbBtn?.addTarget(self, action: #selector(saveToDb), for: .touchUpInside)
             }
         }
     }
@@ -131,72 +158,217 @@ class ViewController: UIViewController {
         return uuid
     }
     
-    func saveToKeychain() {
-        print("\(NSStringFromClass(object_getClass(self)!)) - saveToKeychain()")
+//    func saveToKeychain() {
+//        print("\(NSStringFromClass(object_getClass(self)!)) - saveToKeychain()")
+//
+//        guard let uuid:String = getFromUserDefaults() else {
+//            return
+//        }
+//
+//        let key:String = "encKey-\(uuid)"
+//        let encKey = generateEncKey()
+//        let data:Data = encKey.data(using: .utf8)!
+//
+//        let queryForWrite: [String: Any] = [
+//            kSecClass as String: kSecClassGenericPassword as String,
+//            kSecAttrAccount as String: key,
+//            kSecAttrAccessible as String: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
+//            kSecValueData as String   : data
+//        ]
+//
+//        // will produce error if not deleting up-front when the item exist in keychain
+//        SecItemDelete(queryForWrite as CFDictionary)
+//
+//        let writeStatus: OSStatus = SecItemAdd(queryForWrite as CFDictionary, nil)
+//        if (writeStatus != errSecSuccess) {
+//            if let err = SecCopyErrorMessageString(writeStatus, nil) {
+//                print("error writing to keychain: \(err)")
+//            }
+//        } else {
+//            print("writing to keychain success: \(encKey)")
+//        }
+//    }
+    
+//    func getFromKeychain() {
+//        print("\(NSStringFromClass(object_getClass(self)!)) - getFromKeychain()")
+//
+//        guard let uuid:String = getFromUserDefaults() else {
+//            return
+//        }
+//
+//        let key:String = "encKey-\(uuid)"
+//
+//        let queryForRead: [String: Any] = [
+//            kSecClass as String: kSecClassGenericPassword as String,
+//            kSecAttrAccount as String: key,
+//            kSecReturnData as String: kCFBooleanTrue,
+//            kSecMatchLimit as String: kSecMatchLimitOne
+//        ]
+//
+//        var item:CFTypeRef?
+//
+//        // Search for the keychain items
+//        let readStatus: OSStatus = SecItemCopyMatching(queryForRead as CFDictionary, &item)
+//        if (readStatus == errSecSuccess) {
+//            if let retrievedData = item as? Data {
+//                let encKey = String(data: retrievedData, encoding: .utf8)
+//                print("retrieved value from keychain: \(encKey ?? "")")
+//            } else {
+//                print("no value retrieved from keychain.")
+//            }
+//        } else {
+//            if let err = SecCopyErrorMessageString(readStatus, nil) {
+//                print("error reading from keychain: \(err)")
+//            }
+//        }
+//    }
+    
+    func saveToKeychain2() {
+        print("\(NSStringFromClass(object_getClass(self)!)) - saveToKeychain2()")
         
         guard let uuid:String = getFromUserDefaults() else {
             return
         }
         
         let key:String = "encKey-\(uuid)"
-        let encKey = generateEncKey()
-        let data:Data = encKey.data(using: .utf8)!
+        let value = generateEncKey()
         
-        let queryForWrite: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword as String,
-            kSecAttrAccount as String: key,
-            kSecAttrAccessible as String: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-            kSecValueData as String   : data
-        ]
-        
-        // will produce error if not deleting up-front when the item exist in keychain
-        SecItemDelete(queryForWrite as CFDictionary)
-
-        let writeStatus: OSStatus = SecItemAdd(queryForWrite as CFDictionary, nil)
-        if (writeStatus != errSecSuccess) {
-            if let err = SecCopyErrorMessageString(writeStatus, nil) {
-                print("error writing to keychain: \(err)")
+        if let bundleIdentifier =  Bundle.main.bundleIdentifier {
+            SAMKeychain.setAccessibilityType(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly)
+            if SAMKeychain.setPassword(value, forService: String(describing: bundleIdentifier), account: key) == true {
+                print("writing to keychain success: \(value)")
+            } else {
+                print("fail writing to keychain")
             }
-        } else {
-            print("writing to keychain success: \(encKey)")
         }
     }
     
-    func getFromKeychain() {
-        print("\(NSStringFromClass(object_getClass(self)!)) - getFromKeychain()")
+    func getFromKeychain2() -> String? {
+        print("\(NSStringFromClass(object_getClass(self)!)) - getFromKeychain2()")
         
         guard let uuid:String = getFromUserDefaults() else {
-            return
+            return nil
         }
-        
         let key:String = "encKey-\(uuid)"
         
-        let queryForRead: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword as String,
-            kSecAttrAccount as String: key,
-            kSecReturnData as String: kCFBooleanTrue,
-            kSecMatchLimit as String: kSecMatchLimitOne
-        ]
-        
-        var item:CFTypeRef?
-        
-        // Search for the keychain items
-        let readStatus: OSStatus = SecItemCopyMatching(queryForRead as CFDictionary, &item)
-        if (readStatus == errSecSuccess) {
-            if let retrievedData = item as? Data {
-                let encKey = String(data: retrievedData, encoding: .utf8)
-                print("retrieved value from keychain: \(encKey ?? "")")
+        if let bundleIdentifier =  Bundle.main.bundleIdentifier {
+            SAMKeychain.setAccessibilityType(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly)
+            if let value = SAMKeychain.password(forService: String(describing: bundleIdentifier), account: key) {
+                print("retrieved value from keychain: \(value)")
+                return value
             } else {
-                print("no value retrieved from keychain.")
-            }
-        } else {
-            if let err = SecCopyErrorMessageString(readStatus, nil) {
-                print("error reading from keychain: \(err)")
+                print("fail reading from keychain")
             }
         }
+        
+        return nil
+    }
+    
+    func get32BitChecksum() -> String? {
+        print("\(NSStringFromClass(object_getClass(self)!)) - get32BitChecksum()")
+        
+        if let credential = self.getFromKeychain2() {
+            if let sha256checksum = self.generateSha256ChecksumString(credential + "user_id") {
+                // further reduce the checksum string from 64 bits lenght to 32 bits length by hashing it with MD5
+                return self.generateMd5ChecksumString(sha256checksum)
+            }
+        }
+        
+        return nil
+    }
+    
+    internal func generateSha256ChecksumString(_ inputString:String?) -> String? {
+        print("\(NSStringFromClass(object_getClass(self)!)) - generateSha256ChecksumString()")
+        
+        let data:Data? = inputString?.data(using: .utf8)
+        var checksum:String?
+        checksum = data?.sha256().toHexString()
+        print("SHA256 checksum generated: \(checksum ?? "")")
+        
+        return checksum
+    }
+    
+    internal func generateMd5ChecksumString(_ inputString:String?) -> String? {
+        print("\(NSStringFromClass(object_getClass(self)!)) - generateMd5ChecksumString()")
+        
+        let data:Data? = inputString?.data(using: .utf8)
+        var checksum:String?
+        checksum = data?.md5().toHexString()
+        print("MD5 checksum generated: \(checksum ?? "")")
+        
+        return checksum
+    }
+    
+    func encryptString() {
+        print("\(NSStringFromClass(object_getClass(self)!)) - encryptString()")
+        
+        let temp:String = "some_value"
+        
+        do {
+            if let encryptedStr = try self.encrypt(temp) {
+                print("encrytped string: \(encryptedStr)")
+            }
+        } catch {
+            print("error encrypting data: \(error.localizedDescription)")
+        }
+    }
+    
+    func decryptString() {
+        print("\(NSStringFromClass(object_getClass(self)!)) - decryptString()")
+        
+        let temp:String = "some_value"
+        
+        do {
+            if let encryptedStr = try self.encrypt(temp) {
+                print("encrytped string: \(encryptedStr)")
+                if let descryptedStr = try self.decrypt(encryptedStr) {
+                    print("decrypted string: \(descryptedStr)")
+                }
+            }
+        } catch {
+            print("error encrypting data: \(error.localizedDescription)")
+        }
+    }
+    
+    internal func encrypt(_ decipheredText:String) throws -> String? {
+        if let credential = self.getFromKeychain2() {
+            if let encKey = self.get32BitChecksum() {
+                do {
+                    let aes = try AES(key: encKey, iv: "", blockMode: .CBC, padding: PKCS7())
+                    let cipheredText = try aes.encrypt(Array(decipheredText.utf8))
+                    let base64_cipheredText = Data(bytes: cipheredText).base64EncodedString()
+                    return base64_cipheredText
+                    
+                } catch {
+                    throw error
+                }
+            }
+        }
+        return nil
+    }
+    
+    internal func decrypt(_ base64_cipheredText:String) throws -> String? {
+        if let credential = self.getFromKeychain2() {
+            if let encKey = self.get32BitChecksum() {
+                do {
+                    let aes = try AES(key: encKey, iv: "", blockMode: .CBC, padding: PKCS7())
+                    if let base64_cipherData = Data(base64Encoded: base64_cipheredText) {
+                        let decipheredData = try aes.decrypt(base64_cipherData.bytes)
+                        let decipheredText = String(bytes:decipheredData, encoding:String.Encoding.utf8)
+                        return decipheredText
+                    }
+                    
+                } catch {
+                    throw error
+                }
+            }
+        }
+        return nil
     }
     
     func saveToDb() {
+        print("\(NSStringFromClass(object_getClass(self)!)) - saveToDb()")
+        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
@@ -220,6 +392,8 @@ class ViewController: UIViewController {
     }
     
     func getFromDb() {
+        print("\(NSStringFromClass(object_getClass(self)!)) - getFromDb()")
+        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
