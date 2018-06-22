@@ -305,9 +305,7 @@ class ViewController: UIViewController {
         let temp:String = "some_value"
         
         do {
-            if let encryptedStr = try self.encrypt(temp) {
-                print("encrytped string: \(encryptedStr)")
-            }
+            try self.encrypt(temp)
         } catch {
             print("error encrypting data: \(error.localizedDescription)")
         }
@@ -320,10 +318,7 @@ class ViewController: UIViewController {
         
         do {
             if let encryptedStr = try self.encrypt(temp) {
-                print("encrytped string: \(encryptedStr)")
-                if let descryptedStr = try self.decrypt(encryptedStr) {
-                    print("decrypted string: \(descryptedStr)")
-                }
+                try self.decrypt(encryptedStr)
             }
         } catch {
             print("error encrypting data: \(error.localizedDescription)")
@@ -331,36 +326,34 @@ class ViewController: UIViewController {
     }
     
     internal func encrypt(_ decipheredText:String) throws -> String? {
-        if let credential = self.getFromKeychain2() {
-            if let encKey = self.get32BitChecksum() {
-                do {
-                    let aes = try AES(key: encKey, iv: "", blockMode: .CBC, padding: PKCS7())
-                    let cipheredText = try aes.encrypt(Array(decipheredText.utf8))
-                    let base64_cipheredText = Data(bytes: cipheredText).base64EncodedString()
-                    return base64_cipheredText
-                    
-                } catch {
-                    throw error
-                }
+        if let encKey = self.get32BitChecksum() {
+            do {
+                let aes = try AES(key: encKey, iv: "", blockMode: .CBC, padding: PKCS7())
+                let cipheredText = try aes.encrypt(Array(decipheredText.utf8))
+                let base64_cipheredText = Data(bytes: cipheredText).base64EncodedString()
+                print("encrytped string: \(base64_cipheredText)")
+                return base64_cipheredText
+                
+            } catch {
+                throw error
             }
         }
         return nil
     }
     
     internal func decrypt(_ base64_cipheredText:String) throws -> String? {
-        if let credential = self.getFromKeychain2() {
-            if let encKey = self.get32BitChecksum() {
-                do {
-                    let aes = try AES(key: encKey, iv: "", blockMode: .CBC, padding: PKCS7())
-                    if let base64_cipherData = Data(base64Encoded: base64_cipheredText) {
-                        let decipheredData = try aes.decrypt(base64_cipherData.bytes)
-                        let decipheredText = String(bytes:decipheredData, encoding:String.Encoding.utf8)
-                        return decipheredText
-                    }
-                    
-                } catch {
-                    throw error
+        if let encKey = self.get32BitChecksum() {
+            do {
+                let aes = try AES(key: encKey, iv: "", blockMode: .CBC, padding: PKCS7())
+                if let base64_cipherData = Data(base64Encoded: base64_cipheredText) {
+                    let decipheredData = try aes.decrypt(base64_cipherData.bytes)
+                    let decipheredText = String(bytes:decipheredData, encoding:String.Encoding.utf8)
+                    print("decrypted string: \(decipheredText ?? "")")
+                    return decipheredText
                 }
+                
+            } catch {
+                throw error
             }
         }
         return nil
@@ -376,19 +369,48 @@ class ViewController: UIViewController {
         let managedContext = appDelegate.persistentContainer.viewContext
         
         // TODO: the DB name should be identical to the user id
-        let entity = NSEntityDescription.entity(forEntityName: "DbCachedData", in: managedContext)
-        
-        let cachedData = NSManagedObject(entity: entity!, insertInto: managedContext)
-        
-        // TODO: perform user-level data encryption using AES256, encrypt against the app's encKey + userId
-        cachedData.setValue("some_value", forKey: "some_key")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DbCachedData")
         
         do {
-            try managedContext.save()
-            print("writing to DB success")
+            let resultSet:[NSManagedObject] = try managedContext.fetch(fetchRequest)
+            
+            // TODO: perform user-level data encryption using AES256, encrypt against the app's encKey + userId
+            if let cipheredText = try self.encrypt("some_value") {
+                if let result = resultSet.first {
+                    // DB is not empty, update the data
+                    result.setValue(cipheredText, forKey: "some_key")
+                } else {
+                    // DB is empty, creating the data
+                    // TODO: the DB name should be identical to the user id
+                    let entity = NSEntityDescription.entity(forEntityName: "DbCachedData", in: managedContext)
+                    let result = NSManagedObject(entity: entity!, insertInto: managedContext)
+                    result.setValue(cipheredText, forKey: "some_key")
+                }
+                
+                try managedContext.save()
+                print("writing to DB success")
+            }
         } catch let error as NSError {
-            print("error writing to DB: \(error), \(error.userInfo)")
+            print("error writing from DB: \(error), \(error.userInfo)")
         }
+        
+//        // TODO: the DB name should be identical to the user id
+//        let entity = NSEntityDescription.entity(forEntityName: "DbCachedData", in: managedContext)
+//
+//        let cachedData = NSManagedObject(entity: entity!, insertInto: managedContext)
+//
+//        do {
+//            // TODO: perform user-level data encryption using AES256, encrypt against the app's encKey + userId
+//            if let cipheredText = try self.encrypt("some_value") {
+//                cachedData.setValue(cipheredText, forKey: "some_key")
+//            }
+//
+//            try managedContext.save()
+//            print("writing to DB success")
+//
+//        } catch let error as NSError {
+//            print("error writing to DB: \(error), \(error.userInfo)")
+//        }
     }
     
     func getFromDb() {
@@ -400,17 +422,19 @@ class ViewController: UIViewController {
         
         let managedContext = appDelegate.persistentContainer.viewContext
         
+        // TODO: the DB name should be identical to the user id
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DbCachedData")
         
         do {
             let resultSet:[NSManagedObject] = try managedContext.fetch(fetchRequest)
-            print("reading to DB success")
             
-            for result in resultSet {
-                if let value = result.value(forKey: "some_key") {
-                    print("retrieved value: \(value)")
-                    break
+            if let result = resultSet.first {
+                if let cipheredText = result.value(forKey: "some_key") as? String {
+                    try self.decrypt(cipheredText)
+                    print("reading from DB success")
                 }
+            } else {
+                print("DB doesn't exist")
             }
             
         } catch let error as NSError {
