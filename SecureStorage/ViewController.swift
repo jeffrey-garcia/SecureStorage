@@ -326,9 +326,12 @@ class ViewController: UIViewController {
     }
     
     internal func encrypt(_ decipheredText:String) throws -> String? {
-        if let encKey = self.get32BitChecksum() {
+        if let checksum = self.get32BitChecksum() {
             do {
-                let aes = try AES(key: encKey, iv: "", blockMode: .CBC, padding: PKCS7())
+                let encKey:String = String(checksum.prefix(16))
+                let vector:String = String(checksum.suffix(16))
+                
+                let aes = try AES(key: encKey, iv: vector, blockMode: .CBC, padding: PKCS7())
                 let cipheredText = try aes.encrypt(Array(decipheredText.utf8))
                 let base64_cipheredText = Data(bytes: cipheredText).base64EncodedString()
                 print("encrytped string: \(base64_cipheredText)")
@@ -342,9 +345,12 @@ class ViewController: UIViewController {
     }
     
     internal func decrypt(_ base64_cipheredText:String) throws -> String? {
-        if let encKey = self.get32BitChecksum() {
+        if let checksum = self.get32BitChecksum() {
             do {
-                let aes = try AES(key: encKey, iv: "", blockMode: .CBC, padding: PKCS7())
+                let encKey:String = String(checksum.prefix(16))
+                let vector:String = String(checksum.suffix(16))
+                
+                let aes = try AES(key: encKey, iv: vector, blockMode: .CBC, padding: PKCS7())
                 if let base64_cipherData = Data(base64Encoded: base64_cipheredText) {
                     let decipheredData = try aes.decrypt(base64_cipherData.bytes)
                     let decipheredText = String(bytes:decipheredData, encoding:String.Encoding.utf8)
