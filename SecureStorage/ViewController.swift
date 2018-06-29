@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 import CryptoSwift
 import SAMKeychain
@@ -124,6 +125,26 @@ class ViewController: UIViewController {
         print("uuid string: \(uuid)")
         
         return uuid
+    }
+    
+    func sendLocalPush() {
+        // send local push to notify user
+        let content = UNMutableNotificationContent()
+        content.title = "This is a local notification"
+        content.subtitle = "Hello there"
+        content.body = "Hello body"
+        content.categoryIdentifier = "actionCategory"
+        content.sound = UNNotificationSound.default()
+        // Deliver the notification in 1 second
+        let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 5.0, repeats: false)
+        let request = UNNotificationRequest.init(identifier: UUID().uuidString, content: content, trigger: trigger)
+        // Schedule the notification.
+        let center = UNUserNotificationCenter.current()
+        center.add(request) { (error) in
+            if let error = error as NSError? {
+                print("error code:\(error.code), description: \(error.description)")
+            }
+        }
     }
     
     func saveToUserDefaults() {
@@ -376,6 +397,7 @@ class ViewController: UIViewController {
         
         // TODO: the DB name should be identical to the user id
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DbCachedData")
+        fetchRequest.predicate = NSPredicate(format: "some_key = %@", "key_1")
         
         do {
             let resultSet:[NSManagedObject] = try managedContext.fetch(fetchRequest)
@@ -383,14 +405,17 @@ class ViewController: UIViewController {
             // TODO: perform user-level data encryption using AES256, encrypt against the app's encKey + userId
             if let cipheredText = try self.encrypt("some_value") {
                 if let result = resultSet.first {
-                    // DB is not empty, update the data
-                    result.setValue(cipheredText, forKey: "some_key")
+                    // Record is found, update the data
+                    result.setValue("key_1", forKey: "some_key")
+                    result.setValue(cipheredText, forKey: "some_value")
+                    
                 } else {
-                    // DB is empty, creating the data
+                    // Record not found, creating the data
                     // TODO: the DB name should be identical to the user id
                     let entity = NSEntityDescription.entity(forEntityName: "DbCachedData", in: managedContext)
                     let result = NSManagedObject(entity: entity!, insertInto: managedContext)
-                    result.setValue(cipheredText, forKey: "some_key")
+                    result.setValue("key_1", forKey: "some_key")
+                    result.setValue(cipheredText, forKey: "some_value")
                 }
                 
                 try managedContext.save()
@@ -430,12 +455,13 @@ class ViewController: UIViewController {
         
         // TODO: the DB name should be identical to the user id
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DbCachedData")
+        fetchRequest.predicate = NSPredicate(format: "some_key = %@", "key_1")
         
         do {
             let resultSet:[NSManagedObject] = try managedContext.fetch(fetchRequest)
             
             if let result = resultSet.first {
-                if let cipheredText = result.value(forKey: "some_key") as? String {
+                if let cipheredText = result.value(forKey: "some_value") as? String {
                     try self.decrypt(cipheredText)
                     print("reading from DB success")
                 }

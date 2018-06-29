@@ -53,6 +53,7 @@
 		0027043620DA3066003151FF /* LaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		0027043820DA3180003151FF /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
 		0027043A20DB4C29003151FF /* SecureStorage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SecureStorage-Bridging-Header.h"; sourceTree = "<group>"; };
+		004460F320E208F200E41E83 /* SecureStorage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SecureStorage.entitlements; sourceTree = "<group>"; };
 		1D297E70BFAD838D32B2915E /* Pods-SecureStorage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureStorage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureStorage/Pods-SecureStorage.release.xcconfig"; sourceTree = "<group>"; };
 		245801FEA0F709A9AB4A71AA /* Pods_SecureStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4540A271BD7FC0E246AEE48D /* Pods-SecureStorageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureStorageUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SecureStorageUITests/Pods-SecureStorageUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -118,6 +119,7 @@
 		0027040220DA2F4A003151FF /* SecureStorage */ = {
 			isa = PBXGroup;
 			children = (
+				004460F320E208F200E41E83 /* SecureStorage.entitlements */,
 				0027043620DA3066003151FF /* LaunchScreen.xib */,
 				0027043820DA3180003151FF /* ViewController.xib */,
 				0027040320DA2F4A003151FF /* AppDelegate.swift */,
@@ -249,6 +251,11 @@
 					002703FF20DA2F4A003151FF = {
 						CreatedOnToolsVersion = 9.3.1;
 						LastSwiftMigration = 0930;
+						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
+						};
 					};
 					0027041620DA2F4E003151FF = {
 						CreatedOnToolsVersion = 9.3.1;

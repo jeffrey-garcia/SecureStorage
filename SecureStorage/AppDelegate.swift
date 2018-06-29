@@ -8,13 +8,43 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
-
+    func requestPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) {
+            (accepted, error) in
+            if !accepted {
+                print("Notification access denied.")
+            }
+        }
+        UNUserNotificationCenter.current().delegate = self
+    }
+    
+    // for displaying notification when app is in foreground
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .badge, .sound])
+    }
+    
+    // for handling tap and user actions
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        switch response.actionIdentifier {
+        case "action1":
+            print("Action First Tapped")
+        case "action2":
+            print("Action Second Tapped")
+        default:
+            break
+        }
+        
+        completionHandler()
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         print("\(NSStringFromClass(object_getClass(self)!)) - didFinishLaunchingWithOptions")
@@ -29,6 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window!.backgroundColor = UIColor(white: 0.7, alpha: 1.0)
         self.window!.makeKeyAndVisible()
+        
+        self.requestPermissions()
         
         return true
     }

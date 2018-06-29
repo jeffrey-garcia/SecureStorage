@@ -38,17 +38,17 @@
                 <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecH-mA-lqa">
                     <rect key="frame" x="10" y="138" width="355" height="30"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    <state key="normal" title="Generate EncKey (UUID)"/>
+                    <state key="normal" title="Generate Secret (UUID)"/>
                 </button>
                 <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="adk-4Z-h8M">
                     <rect key="frame" x="10" y="173" width="355" height="30"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    <state key="normal" title="Save EncKey (UUID) to Keychain"/>
+                    <state key="normal" title="Save Secret (UUID) to Keychain"/>
                 </button>
                 <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fL8-P1-U3G">
                     <rect key="frame" x="10" y="208" width="355" height="30"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    <state key="normal" title="Get EncKey (UUID) from Keychain"/>
+                    <state key="normal" title="Get Secret (UUID) from Keychain"/>
                 </button>
                 <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zf7-UZ-I4w">
                     <rect key="frame" x="10" y="243" width="355" height="30"/>
