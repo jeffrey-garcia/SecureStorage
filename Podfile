@@ -13,6 +13,7 @@ def main
   pod 'CryptoSwift', '0.7.0'
   pod 'ObjectMapper', '2.2.5'
   pod 'SAMKeychain', '1.5.3'
+  pod 'ReachabilitySwift', '4.1.0'
 end
 
 target 'SecureStorage' do

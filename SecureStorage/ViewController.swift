@@ -397,7 +397,7 @@ class ViewController: UIViewController {
         
         // TODO: the DB name should be identical to the user id
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DbCachedData")
-        fetchRequest.predicate = NSPredicate(format: "some_key = %@", "key_1")
+        fetchRequest.predicate = NSPredicate(format: "some_key = %@", "https://vncmpd1-manulife-vietnam.cs57.force.com/cmp/services/apexrest/contactMgt/v1.1/getLeads")
         
         do {
             let resultSet:[NSManagedObject] = try managedContext.fetch(fetchRequest)
@@ -406,7 +406,7 @@ class ViewController: UIViewController {
             if let cipheredText = try self.encrypt("some_value") {
                 if let result = resultSet.first {
                     // Record is found, update the data
-                    result.setValue("key_1", forKey: "some_key")
+                    result.setValue("https://vncmpd1-manulife-vietnam.cs57.force.com/cmp/services/apexrest/contactMgt/v1.1/getLeads", forKey: "some_key")
                     result.setValue(cipheredText, forKey: "some_value")
                     
                 } else {
@@ -414,7 +414,7 @@ class ViewController: UIViewController {
                     // TODO: the DB name should be identical to the user id
                     let entity = NSEntityDescription.entity(forEntityName: "DbCachedData", in: managedContext)
                     let result = NSManagedObject(entity: entity!, insertInto: managedContext)
-                    result.setValue("key_1", forKey: "some_key")
+                    result.setValue("https://vncmpd1-manulife-vietnam.cs57.force.com/cmp/services/apexrest/contactMgt/v1.1/getLeads", forKey: "some_key")
                     result.setValue(cipheredText, forKey: "some_value")
                 }
                 
@@ -455,7 +455,7 @@ class ViewController: UIViewController {
         
         // TODO: the DB name should be identical to the user id
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DbCachedData")
-        fetchRequest.predicate = NSPredicate(format: "some_key = %@", "key_1")
+        fetchRequest.predicate = NSPredicate(format: "some_key = %@", "https://vncmpd1-manulife-vietnam.cs57.force.com/cmp/services/apexrest/contactMgt/v1.1/getLeads")
         
         do {
             let resultSet:[NSManagedObject] = try managedContext.fetch(fetchRequest)

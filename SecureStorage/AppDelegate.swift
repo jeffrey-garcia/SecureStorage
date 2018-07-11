@@ -10,11 +10,24 @@ import UIKit
 import CoreData
 import UserNotifications
 
+import Reachability
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
+    let reachability = Reachability()!
+    
     var window: UIWindow?
 
+    func registerReachabilityObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged(_:)), name: .reachabilityChanged, object: reachability)
+        do{
+            try reachability.startNotifier()
+        }catch{
+            print("could not start reachability notifier")
+        }
+    }
+    
     func requestPermissions() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) {
             (accepted, error) in
@@ -45,6 +58,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         completionHandler()
     }
     
+    // for handling reachability changed event
+    func reachabilityChanged(_ note:Notification) {
+        let reachability = note.object as! Reachability
+        
+        switch reachability.connection {
+            case .wifi:
+                print("Reachable via WiFi")
+            case .cellular:
+                print("Reachable via Cellular")
+            case .none:
+                print("Network not reachable")
+        }
+    }
+    
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         print("\(NSStringFromClass(object_getClass(self)!)) - didFinishLaunchingWithOptions")
@@ -61,6 +90,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.window!.makeKeyAndVisible()
         
         self.requestPermissions()
+        
+        self.registerReachabilityObserver()
         
         return true
     }
