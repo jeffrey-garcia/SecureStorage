@@ -13,12 +13,22 @@ import UserNotifications
 import CryptoSwift
 import SAMKeychain
 
-class ViewController: UIViewController {
+import Speech
 
+class ViewController: UIViewController, SFSpeechRecognizerDelegate {
+
+    let audioEngine = AVAudioEngine()
+    let speechRecognizer = SFSpeechRecognizer()
+    let request = SFSpeechAudioBufferRecognitionRequest()
+    var recognitionTask: SFSpeechRecognitionTask?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
         self.initUI()
+        
+        self.requestSpeechAuthorization()
     }
 
     override func didReceiveMemoryWarning() {
@@ -105,7 +115,8 @@ class ViewController: UIViewController {
             if view is UIButton {
                 print("view 10 is \(NSStringFromClass(object_getClass(view)!))")
                 let getFromDbBtn = view as? UIButton
-                getFromDbBtn?.addTarget(self, action: #selector(getFromDb), for: .touchUpInside)
+                //getFromDbBtn?.addTarget(self, action: #selector(getFromDb), for: .touchUpInside)
+                getFromDbBtn?.addTarget(self, action: #selector(startRecording), for: .touchUpInside)
             }
         }
         
@@ -113,7 +124,8 @@ class ViewController: UIViewController {
             if view is UIButton {
                 print("view 11 is \(NSStringFromClass(object_getClass(view)!))")
                 let saveToDbBtn = view as? UIButton
-                saveToDbBtn?.addTarget(self, action: #selector(saveToDb), for: .touchUpInside)
+                //saveToDbBtn?.addTarget(self, action: #selector(saveToDb), for: .touchUpInside)
+                saveToDbBtn?.addTarget(self, action: #selector(stopRecording), for: .touchUpInside)
             }
         }
     }
@@ -472,6 +484,89 @@ class ViewController: UIViewController {
         } catch let error as NSError {
             print("error reading from DB: \(error), \(error.userInfo)")
         }
+    }
+    
+    func requestSpeechAuthorization() {
+        SFSpeechRecognizer.requestAuthorization {
+            [unowned self] (authStatus) in
+            switch authStatus {
+            case .authorized:
+                print("Speech recognition authorization granted")
+            case .denied:
+                print("Speech recognition authorization denied")
+            case .restricted:
+                print("Not available on this device")
+            case .notDetermined:
+                print("Not determined")
+            }
+        }
+    }
+    
+    func startRecording() {
+        print("start recording")
+        
+        guard let node = audioEngine.inputNode else {
+            return
+        }
+        
+        let recordingFormat = node.outputFormat(forBus: 0)
+        node.installTap(onBus: 0, bufferSize: 64, format: recordingFormat) {
+            (buffer, _)  in
+            self.request.append(buffer)
+        }
+        
+        audioEngine.prepare()
+        do {
+            try audioEngine.start()
+        } catch {
+            print(error)
+            return
+        }
+        
+        var timer:Timer?
+        
+        recognitionTask = speechRecognizer?.recognitionTask(with: request) {
+            (result, error) in
+            
+            var isCompleted:Bool = false
+            
+            func restartTimer() {
+                timer?.invalidate()
+                timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: { (timer) in
+                    // Do whatever needs to be done when the timer expires
+                    if (!isCompleted) {
+                        print("timeout")
+                        isCompleted = true
+                        let spokenText = result?.bestTranscription.formattedString
+                        print(spokenText ?? "no spoken text")
+                        self.stopRecording()
+                    }
+                })
+            }
+            
+            if let result = result {
+                if result.isFinal {
+                    isCompleted = true
+                    let spokenText = result.bestTranscription.formattedString
+                    print(spokenText)
+                    self.stopRecording()
+                } else if let error = error {
+                    isCompleted = true
+                    print(error.localizedDescription)
+                    self.stopRecording()
+                } else {
+                    restartTimer()
+                }
+            }
+        }
+    }
+    
+    func stopRecording() {
+        print("stop recording")
+        audioEngine.inputNode?.removeTap(onBus: 0)
+        audioEngine.stop()
+        request.endAudio()
+        recognitionTask?.cancel()
     }
     
 }
