@@ -68,18 +68,29 @@
                 <button opaque="NO" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eiu-qt-6yP">
                     <rect key="frame" x="10" y="348" width="355" height="30"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    <state key="normal" title="Get from DB (SQLite)"/>
+                    <state key="normal" title="Save to DB (via PersistentContainer)"/>
                 </button>
                 <button opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kxj-0Q-b9p">
                     <rect key="frame" x="10" y="383" width="355" height="30"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    <state key="normal" title="Save to DB (SQLite)"/>
+                    <state key="normal" title="Get from DB (via PersistentContainer)"/>
+                </button>
+                <button opaque="NO" tag="12" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuX-Cp-ggl">
+                    <rect key="frame" x="10" y="421" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Save to DB (via NSManagedObjectContext)"/>
+                </button>
+                <button opaque="NO" tag="13" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dAE-FD-yIU">
+                    <rect key="frame" x="10" y="459" width="355" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <state key="normal" title="Get from DB (via NSManagedObjectContext)"/>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="eiu-qt-6yP" secondAttribute="trailing" constant="10" id="0DO-MD-7lp"/>
                 <constraint firstItem="adk-4Z-h8M" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="0h0-A2-aqG"/>
+                <constraint firstItem="dAE-FD-yIU" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="12g-9n-R09"/>
                 <constraint firstItem="tik-S9-ls7" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="2nw-q9-3b1"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="OGD-5I-KMT" secondAttribute="trailing" constant="10" id="2vK-GI-tFG"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="zg5-Gm-trw" secondAttribute="trailing" constant="10" id="7mw-gs-lJh"/>
@@ -90,15 +101,20 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="ecH-mA-lqa" secondAttribute="trailing" constant="10" id="Dd7-Wv-dRL"/>
                 <constraint firstItem="eiu-qt-6yP" firstAttribute="top" secondItem="Njl-e7-NHz" secondAttribute="bottom" constant="5" id="E3O-Vq-23h"/>
                 <constraint firstItem="Njl-e7-NHz" firstAttribute="top" secondItem="tik-S9-ls7" secondAttribute="bottom" constant="5" id="EuQ-ZM-hmH"/>
+                <constraint firstItem="cuX-Cp-ggl" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="JAI-zU-DkV"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="fL8-P1-U3G" secondAttribute="trailing" constant="10" id="MRG-15-Rcs"/>
+                <constraint firstItem="cuX-Cp-ggl" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="Mex-j1-mVb"/>
                 <constraint firstItem="ecH-mA-lqa" firstAttribute="top" secondItem="zg5-Gm-trw" secondAttribute="bottom" constant="8" id="Q7r-RK-oPw"/>
                 <constraint firstItem="fL8-P1-U3G" firstAttribute="top" secondItem="adk-4Z-h8M" secondAttribute="bottom" constant="5" id="Rq5-dQ-hvb"/>
                 <constraint firstItem="OGD-5I-KMT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="SWn-lX-7Br"/>
                 <constraint firstItem="7mC-3j-O0G" firstAttribute="top" secondItem="OGD-5I-KMT" secondAttribute="bottom" constant="5" id="TPp-0r-Zpo"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Njl-e7-NHz" secondAttribute="trailing" constant="10" id="Tyl-hj-eYg"/>
                 <constraint firstItem="Njl-e7-NHz" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="Wg5-VB-a20"/>
+                <constraint firstItem="dAE-FD-yIU" firstAttribute="top" secondItem="cuX-Cp-ggl" secondAttribute="bottom" constant="5" id="YJg-qK-RzB"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="tik-S9-ls7" secondAttribute="trailing" constant="10" id="Z32-JG-Z4n"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="cuX-Cp-ggl" secondAttribute="trailing" constant="10" id="ZoI-fc-ywW"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="7mC-3j-O0G" secondAttribute="trailing" constant="10" id="cuG-6M-l8b"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="dAE-FD-yIU" secondAttribute="trailing" constant="10" id="eZD-5Z-1g8"/>
                 <constraint firstItem="7mC-3j-O0G" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="eto-of-ahw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="kxj-0Q-b9p" secondAttribute="trailing" constant="10" id="fI3-75-PbF"/>
                 <constraint firstItem="ecH-mA-lqa" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="fLo-4n-wGc"/>
@@ -110,10 +126,12 @@
                 <constraint firstItem="zg5-Gm-trw" firstAttribute="top" secondItem="7mC-3j-O0G" secondAttribute="bottom" constant="5" id="rih-8O-Oet"/>
                 <constraint firstItem="tik-S9-ls7" firstAttribute="top" secondItem="zf7-UZ-I4w" secondAttribute="bottom" constant="5" id="t77-o8-nef"/>
                 <constraint firstItem="zf7-UZ-I4w" firstAttribute="top" secondItem="fL8-P1-U3G" secondAttribute="bottom" constant="5" id="vwm-05-GoP"/>
+                <constraint firstItem="cuX-Cp-ggl" firstAttribute="top" secondItem="kxj-0Q-b9p" secondAttribute="bottom" constant="5" id="woe-Pr-WsW"/>
                 <constraint firstItem="eiu-qt-6yP" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="ys2-2A-sBA"/>
                 <constraint firstItem="kxj-0Q-b9p" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="zXL-OZ-Vbz"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="33.5" y="137.5"/>
         </view>
     </objects>
 </document>

@@ -119,7 +119,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
     }
-
+    
+    lazy var applicationDocumentsDirectory: URL = {
+        // The directory the application uses to store the Core Data store file. This code uses a directory named "com.cocoacasts.PersistentStores" in the application's documents Application Support directory.
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return urls[urls.count-1]
+    }()
+    
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        let coordinator = NSPersistentStoreCoordinator.init(managedObjectModel: self.setupCoreDataModel())
+        
+        // setup persistent store coordinator
+        let storeUrl = self.applicationDocumentsDirectory.appendingPathComponent("DTCachedFile.sqllite")
+        
+        do {
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeUrl, options: nil)
+            let context = NSManagedObjectContext.init(concurrencyType: .privateQueueConcurrencyType)
+            context.persistentStoreCoordinator = coordinator
+            return context
+        } catch {
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+    }()
+    
+    func setupCoreDataModel() -> NSManagedObjectModel {
+        var properties = [NSAttributeDescription]()
+        
+        let some_key = NSAttributeDescription()
+        some_key.name = "some_key"
+        some_key.attributeType = .stringAttributeType
+        some_key.isOptional = false
+        properties.append(some_key)
+        
+        let some_value = NSAttributeDescription()
+        some_value.name = "some_value"
+        some_value.attributeType = .stringAttributeType
+        some_value.isOptional = false
+        properties.append(some_value)
+        
+        let entity = NSEntityDescription()
+        entity.name = "DTCachedFile"
+        entity.managedObjectClassName = "DTCachedFile"
+        entity.properties = properties
+        
+        let model = NSManagedObjectModel()
+        model.entities = [entity]
+        
+        return model
+    }
+    
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {

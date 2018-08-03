@@ -114,18 +114,34 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
         if let view = self.view.viewWithTag(10) { // follow the tag defined in the Interface Builder of the button
             if view is UIButton {
                 print("view 10 is \(NSStringFromClass(object_getClass(view)!))")
-                let getFromDbBtn = view as? UIButton
-                //getFromDbBtn?.addTarget(self, action: #selector(getFromDb), for: .touchUpInside)
-                getFromDbBtn?.addTarget(self, action: #selector(startRecording), for: .touchUpInside)
+                let saveToDbBtn = view as? UIButton
+                saveToDbBtn?.addTarget(self, action: #selector(saveToDb), for: .touchUpInside)
+                //saveToDbBtn?.addTarget(self, action: #selector(startRecording), for: .touchUpInside)
             }
         }
         
         if let view = self.view.viewWithTag(11) { // follow the tag defined in the Interface Builder of the button
             if view is UIButton {
                 print("view 11 is \(NSStringFromClass(object_getClass(view)!))")
+                let getFromDbBtn = view as? UIButton
+                getFromDbBtn?.addTarget(self, action: #selector(getFromDb), for: .touchUpInside)
+                //getFromDbBtn?.addTarget(self, action: #selector(stopRecording), for: .touchUpInside)
+            }
+        }
+        
+        if let view = self.view.viewWithTag(12) { // follow the tag defined in the Interface Builder of the button
+            if view is UIButton {
+                print("view 12 is \(NSStringFromClass(object_getClass(view)!))")
                 let saveToDbBtn = view as? UIButton
-                //saveToDbBtn?.addTarget(self, action: #selector(saveToDb), for: .touchUpInside)
-                saveToDbBtn?.addTarget(self, action: #selector(stopRecording), for: .touchUpInside)
+                saveToDbBtn?.addTarget(self, action: #selector(saveToDb), for: .touchUpInside)
+            }
+        }
+        
+        if let view = self.view.viewWithTag(13) { // follow the tag defined in the Interface Builder of the button
+            if view is UIButton {
+                print("view 13 is \(NSStringFromClass(object_getClass(view)!))")
+                let getFromDbBtn = view as? UIButton
+                getFromDbBtn?.addTarget(self, action: #selector(getFromDb), for: .touchUpInside)
             }
         }
     }
@@ -398,17 +414,26 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
         return nil
     }
     
-    func saveToDb() {
+    func saveToDb(sender:UIButton) {
         print("\(NSStringFromClass(object_getClass(self)!)) - saveToDb()")
+        print("sender tag: \(sender.tag)")
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
         
-        let managedContext = appDelegate.persistentContainer.viewContext
+        var entityName:String
+        var managedContext:NSManagedObjectContext
+        if (sender.tag == 10) {
+            entityName = "DbCachedData"
+            managedContext = appDelegate.persistentContainer.viewContext
+        } else {
+            entityName = "DTCachedFile" // default
+            managedContext = appDelegate.managedObjectContext
+        }
         
         // TODO: the DB name should be identical to the user id
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DbCachedData")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: entityName)
         fetchRequest.predicate = NSPredicate(format: "some_key = %@", "https://vncmpd1-manulife-vietnam.cs57.force.com/cmp/services/apexrest/contactMgt/v1.1/getLeads")
         
         do {
@@ -424,7 +449,8 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
                 } else {
                     // Record not found, creating the data
                     // TODO: the DB name should be identical to the user id
-                    let entity = NSEntityDescription.entity(forEntityName: "DbCachedData", in: managedContext)
+                    let entity = NSEntityDescription.entity(forEntityName: entityName, in: managedContext)
+                    
                     let result = NSManagedObject(entity: entity!, insertInto: managedContext)
                     result.setValue("https://vncmpd1-manulife-vietnam.cs57.force.com/cmp/services/apexrest/contactMgt/v1.1/getLeads", forKey: "some_key")
                     result.setValue(cipheredText, forKey: "some_value")
@@ -456,17 +482,26 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 //        }
     }
     
-    func getFromDb() {
+    func getFromDb(sender:UIButton) {
         print("\(NSStringFromClass(object_getClass(self)!)) - getFromDb()")
+        print("sender tag: \(sender.tag)")
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
         
-        let managedContext = appDelegate.persistentContainer.viewContext
+        var entityName:String
+        var managedContext:NSManagedObjectContext
+        if (sender.tag == 11) {
+            entityName = "DbCachedData"
+            managedContext = appDelegate.persistentContainer.viewContext
+        } else {
+            entityName = "DTCachedFile" // default
+            managedContext = appDelegate.managedObjectContext
+        }
         
         // TODO: the DB name should be identical to the user id
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DbCachedData")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: entityName)
         fetchRequest.predicate = NSPredicate(format: "some_key = %@", "https://vncmpd1-manulife-vietnam.cs57.force.com/cmp/services/apexrest/contactMgt/v1.1/getLeads")
         
         do {
