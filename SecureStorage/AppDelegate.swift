@@ -12,6 +12,8 @@ import UserNotifications
 
 import Reachability
 
+import SalesforceSDKCore
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
@@ -19,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
 
+    var logger:SFLogger?
+    
     func registerReachabilityObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged(_:)), name: .reachabilityChanged, object: reachability)
         do{
@@ -72,11 +76,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     
-    
+    func configureLogger() {
+        self.logger = SFLogger.shared()
+        self.logger?.logLevel = SFLogLevel.all
+        self.logger?.shouldLogToFile = true
+        self.logger?.info("testing abc")
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        print("\(NSStringFromClass(object_getClass(self)!)) - didFinishLaunchingWithOptions")
+        
+        self.configureLogger()
+        
+        self.logger?.info("\(NSStringFromClass(object_getClass(self)!)) - didFinishLaunchingWithOptions")
         
         let window: UIWindow = UIWindow(frame: UIScreen.main.bounds)
         self.window = window
@@ -143,7 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }()
     
-    func setupCoreDataModel() -> NSManagedObjectModel {
+    private func setupCoreDataModel() -> NSManagedObjectModel {
         var properties = [NSAttributeDescription]()
         
         let some_key = NSAttributeDescription()
@@ -205,6 +217,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if context.hasChanges {
             do {
                 try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+        
+        if self.managedObjectContext.hasChanges {
+            do {
+                try self.managedObjectContext.save()
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.

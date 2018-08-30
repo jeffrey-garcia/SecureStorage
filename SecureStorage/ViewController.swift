@@ -9,13 +9,14 @@
 import UIKit
 import CoreData
 import UserNotifications
+import MessageUI
 
 import CryptoSwift
 import SAMKeychain
 
 import Speech
 
-class ViewController: UIViewController, SFSpeechRecognizerDelegate {
+class ViewController: UIViewController, SFSpeechRecognizerDelegate, MFMailComposeViewControllerDelegate {
 
     let audioEngine = AVAudioEngine()
     let speechRecognizer = SFSpeechRecognizer()
@@ -142,6 +143,30 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
                 print("view 13 is \(NSStringFromClass(object_getClass(view)!))")
                 let getFromDbBtn = view as? UIButton
                 getFromDbBtn?.addTarget(self, action: #selector(getFromDb), for: .touchUpInside)
+            }
+        }
+        
+        if let view = self.view.viewWithTag(14) { // follow the tag defined in the Interface Builder of the button
+            if view is UIButton {
+                print("view 14 is \(NSStringFromClass(object_getClass(view)!))")
+                let startSpeechRecordingBtn = view as? UIButton
+                startSpeechRecordingBtn?.addTarget(self, action: #selector(startRecording), for: .touchUpInside)
+            }
+        }
+        
+        if let view = self.view.viewWithTag(15) { // follow the tag defined in the Interface Builder of the button
+            if view is UIButton {
+                print("view 15 is \(NSStringFromClass(object_getClass(view)!))")
+                let stopSpeechRecordingBtn = view as? UIButton
+                stopSpeechRecordingBtn?.addTarget(self, action: #selector(stopRecording), for: .touchUpInside)
+            }
+        }
+        
+        if let view = self.view.viewWithTag(16) { // follow the tag defined in the Interface Builder of the button
+            if view is UIButton {
+                print("view 16 is \(NSStringFromClass(object_getClass(view)!))")
+                let exportLogBtn = view as? UIButton
+                exportLogBtn?.addTarget(self, action: #selector(exportLogFile), for: .touchUpInside)
             }
         }
     }
@@ -604,5 +629,52 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
         recognitionTask?.cancel()
     }
     
+    func exportLogFile() {
+        print("exportLogFile")
+        
+        guard
+            let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+            let logger = appDelegate.logger
+        else {
+            return
+        }
+        
+        guard MFMailComposeViewController.canSendMail() == true else {
+            return
+        }
+        
+        appDelegate.logger?.info("prepare to export log file...")
+        do {
+            // prepare the log content to export
+            let content = try logger.logFileContents()
+            let file = "log.txt"
+            let folder = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true)
+            if var path = folder.first {
+                path = "\(path)/\(file)"
+                try content.write(toFile: path, atomically: true, encoding: .utf8)
+                print("log saved to: \(path)")
+                
+                // prepare to attach the log in email
+                let mailCompose = MFMailComposeViewController()
+                mailCompose.mailComposeDelegate = self
+                mailCompose.setSubject("Logs for secure storage")
+                mailCompose.setMessageBody("", isHTML: false)
+                
+                let logFileUrl = URL.init(fileURLWithPath: path, isDirectory: false)
+                let logData = try Data(contentsOf: logFileUrl)
+                
+                mailCompose.addAttachmentData(logData, mimeType: "text/plain", fileName: file)
+                present(mailCompose, animated: true, completion: nil)
+            }
+            
+        } catch let error as NSError {
+            print("error retreving log file path: \(error), \(error.userInfo)")
+        }
+    }
+    
+    func mailComposeController(_ didFinishWithcontroller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?)
+    {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 

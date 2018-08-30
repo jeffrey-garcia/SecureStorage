@@ -89,16 +89,20 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack/CocoaLumberjack.framework"
   install_framework "$BUILT_PRODUCTS_DIR/CryptoSwift/CryptoSwift.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ObjectMapper/ObjectMapper.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ReachabilitySwift/Reachability.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SAMKeychain/SAMKeychain.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/SalesforceSDKCore/SalesforceSDKCore.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack/CocoaLumberjack.framework"
   install_framework "$BUILT_PRODUCTS_DIR/CryptoSwift/CryptoSwift.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ObjectMapper/ObjectMapper.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ReachabilitySwift/Reachability.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SAMKeychain/SAMKeychain.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/SalesforceSDKCore/SalesforceSDKCore.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

@@ -15,6 +15,7 @@
 		0027042720DA2F4E003151FF /* SecureStorageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0027042620DA2F4E003151FF /* SecureStorageUITests.swift */; };
 		0027043720DA3066003151FF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0027043620DA3066003151FF /* LaunchScreen.xib */; };
 		0027043920DA3180003151FF /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0027043820DA3180003151FF /* ViewController.xib */; };
+		008C28E621379378001C010E /* SecureStorage+SFLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008C28E521379378001C010E /* SecureStorage+SFLogger.swift */; };
 		00F52082477F8CB6569224FF /* Pods_SecureStorageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B60D64694A1FF94A5BA2679 /* Pods_SecureStorageTests.framework */; };
 		2442232EA26A3DCBE4039F41 /* Pods_SecureStorageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4E4825FF0D6D873FDA9D77D /* Pods_SecureStorageUITests.framework */; };
 		8293BBAF9646C159DDB01E3F /* Pods_SecureStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 245801FEA0F709A9AB4A71AA /* Pods_SecureStorage.framework */; };
@@ -54,6 +55,7 @@
 		0027043820DA3180003151FF /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
 		0027043A20DB4C29003151FF /* SecureStorage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SecureStorage-Bridging-Header.h"; sourceTree = "<group>"; };
 		004460F320E208F200E41E83 /* SecureStorage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SecureStorage.entitlements; sourceTree = "<group>"; };
+		008C28E521379378001C010E /* SecureStorage+SFLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SecureStorage+SFLogger.swift"; sourceTree = "<group>"; };
 		1D297E70BFAD838D32B2915E /* Pods-SecureStorage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureStorage.release.xcconfig"; path = "Pods/Target Support Files/Pods-SecureStorage/Pods-SecureStorage.release.xcconfig"; sourceTree = "<group>"; };
 		245801FEA0F709A9AB4A71AA /* Pods_SecureStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecureStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4540A271BD7FC0E246AEE48D /* Pods-SecureStorageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecureStorageUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SecureStorageUITests/Pods-SecureStorageUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				0027040120DA2F4A003151FF /* Products */,
 				0027041220DA2F4E003151FF /* Info.plist */,
 				0027040A20DA2F4A003151FF /* SecureStorage.xcdatamodeld */,
+				008C28E521379378001C010E /* SecureStorage+SFLogger.swift */,
 			);
 			path = SecureStorage;
 			sourceTree = "<group>";
@@ -476,6 +479,7 @@
 				0027040620DA2F4A003151FF /* ViewController.swift in Sources */,
 				0027040C20DA2F4A003151FF /* SecureStorage.xcdatamodeld in Sources */,
 				0027040420DA2F4A003151FF /* AppDelegate.swift in Sources */,
+				008C28E621379378001C010E /* SecureStorage+SFLogger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

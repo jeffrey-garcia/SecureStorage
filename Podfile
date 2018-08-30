@@ -10,6 +10,7 @@ source 'https://github.com/forcedotcom/SalesforceMobileSDK-iOS-Specs.git'
 source 'https://git.ap.manulife.com/scm/rmf/podspecs.git'
 
 def main
+  pod 'SalesforceSDKCore', '~> 4.2.0'
   pod 'CryptoSwift', '0.7.0'
   pod 'ObjectMapper', '2.2.5'
   pod 'SAMKeychain', '1.5.3'
