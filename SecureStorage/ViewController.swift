@@ -674,7 +674,8 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate, MFMailCompos
     
     func mailComposeController(_ didFinishWithcontroller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?)
     {
-        self.dismiss(animated: true, completion: nil)
+        //self.dismiss(animated: true, completion: nil)
+        didFinishWithcontroller.dismiss(animated: true, completion: nil)
     }
 }
 

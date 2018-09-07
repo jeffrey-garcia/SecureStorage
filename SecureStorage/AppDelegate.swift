@@ -83,6 +83,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.logger?.info("testing abc")
     }
     
+    func configureOfflineManager() {
+        // to instantiate Core OfflineManager
+//        let offlineMgr = OfflineManager.shared()
+//        print("@@@ offline maanger: \(type(of: offlineMgr))")
+//        print("@@@ logging manager: \(offlineMgr.loggingManager)")
+//        print("@@@ secure storage: \(offlineMgr.secureStorage)")
+        
+        // to instantiate Local CmpOfflineManager
+        let cmpOfflineMgr = CmpOfflineManager.shared()
+        print("@@@ offline maanger: \(type(of: cmpOfflineMgr))")
+        print("@@@ logging manager: \(cmpOfflineMgr.loggingManager)")
+        print("@@@ secure storage: \(cmpOfflineMgr.secureStorage)")
+        cmpOfflineMgr.secureStorage.putRequestToBuffer()
+        (cmpOfflineMgr.secureStorage as? CmpSecureStorage)?.doSomething()
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -95,6 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let viewController = ViewController(nibName: "ViewController", bundle: Bundle.main)
         let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.setNavigationBarHidden(true, animated: false)
         
         self.window!.rootViewController = navigationController
         
@@ -104,6 +121,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.requestPermissions()
         
         self.registerReachabilityObserver()
+        
+        self.configureOfflineManager()
         
         return true
     }
